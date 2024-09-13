@@ -1,15 +1,8 @@
-import {Menu, MenuItem, Sidebar, SubMenu} from "react-pro-sidebar";
+import Sidebar from "@/components/sidebar";
 
 export default function Dashboard (){
-  return <div>
-    <Sidebar>
-      <Menu>
-        <MenuItem>Dashboard</MenuItem>
-        <SubMenu title="Components">
-          <MenuItem>Component 1</MenuItem>
-          <MenuItem>Component 2</MenuItem>
-        </SubMenu>
-      </Menu>
-    </Sidebar>
+  return <div><Sidebar>
+  </Sidebar>
+
   </div>
 }
