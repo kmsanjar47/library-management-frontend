@@ -1,23 +1,31 @@
 "use client";
-import {useState} from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
     const [open, setOpen] = useState(true);
+    const router = useRouter();
 
     const Menus = [
-        {title: "Dashboard", src: "home"},
-        {title: "Book Management", src: "book", gap: true},
-        {title: "Member Management", src: "member"},
-        {title: "Author Management", src: "author"},
-        {title: "Loan Management", src: "loan"},
-        {title: "Category Management", src: "category"},
-        {title: "Branch Management", src: "branch"},
-        {title: "Room Management", src: "room"},
-        {title: "Profile", src: "profile", gap: true},
-        {title: "Logout", src: "logout"},
+        { title: "Dashboard", src: "/" },
+        { title: "Book Management", src: "book", gap: true },
+        { title: "Member Management", src: "member" },
+        { title: "Author Management", src: "author" },
+        { title: "Loan Management", src: "loan" },
+        { title: "Category Management", src: "category" },
+        { title: "Branch Management", src: "branch" },
+        { title: "Room Management", src: "room" },
+        { title: "Logout", src: "logout", gap: true },
     ];
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+
+        router.replace('/authentication');
+    };
 
     return (
         <div className="flex">
@@ -37,7 +45,6 @@ const Sidebar = () => {
                     onClick={() => setOpen(!open)}
                 />
                 <div className="flex gap-x-4 items-center">
-
                     <h1
                         className={`text-white origin-left font-medium text-xl duration-200 ${
                             !open && "scale-0"
@@ -53,11 +60,16 @@ const Sidebar = () => {
                             className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 ${
                                 Menu.gap ? "mt-9" : "mt-2"
                             } ${index === 0 && "bg-light-white"}`}
+                            onClick={() => {
+                                if (Menu.title === "Logout") {
+                                    handleLogout();
+                                }
+                            }}
                         >
-                            <img src={`/lib/assets/${Menu.src}.svg`}/>
+                            <img src={`/lib/assets/${Menu.src}.svg`} />
                             <span className={`${!open && "hidden"} origin-left duration-200`}>
-                <Link href={`/dashboard/admin/${Menu.src}`}>{Menu.title}</Link>
-              </span>
+                                <Link href={`/dashboard/admin/${Menu.src}`}>{Menu.title}</Link>
+                            </span>
                         </li>
                     ))}
                 </ul>

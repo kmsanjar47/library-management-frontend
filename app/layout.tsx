@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import {ThemeProvider} from "@/components/providers/theme-provider";
+import {Provider} from "jotai";
+import 'react-toastify/dist/ReactToastify.css';
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -32,7 +34,9 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-        {children}
+          <Provider>
+            {children}
+          </Provider>
       </ThemeProvider>
       </body>
     </html>

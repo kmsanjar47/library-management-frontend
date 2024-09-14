@@ -9,12 +9,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import authorAtom from "@/atoms/author-atom";
 import { useAtom } from "jotai";
-import bookAtom from "@/atoms/book-atom";
 
-export default function BookManagement() {
+export default function AuthorManagement() {
     const router = useRouter();
-    const [bookAtomData, setBookAtom] = useAtom(bookAtom);
+    const [authorAtomData, setAuthor] = useAtom(authorAtom);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -22,16 +22,16 @@ export default function BookManagement() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:8000/api/v1/close/book', {
+                const response = await fetch('http://localhost:8000/api/v1/close/author', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
                     },
                 });
                 if (response.status === 200) {
-                    toast.success('Books fetched successfully');
+                    toast.success('Authors fetched successfully');
                     const result = await response.json();
-                    setBookAtom(result);
+                    setAuthor(result);
                 } else {
                     toast.error('Failed to fetch data');
                 }
@@ -45,27 +45,14 @@ export default function BookManagement() {
         fetchData();
     }, []);
 
-    // Define column definitions
+    // Define column definitions and add a delete button
     const colDefs: ColDef[] = [
         { headerName: 'ID', field: 'id', editable: false }, // ID shouldn't be editable
-        { headerName: 'Title', field: 'title', editable: true }, // Editable field
-        { headerName: 'Author', field: 'author', editable: true }, // Editable field
-        { headerName: 'ISBN', field: 'isbn', editable: true }, // Editable field
-        { headerName: 'Publisher', field: 'publisher', editable: true }, // Editable field
-        { headerName: 'Published Date', field: 'published_date', editable: true }, // Editable field
-        { headerName: 'Edition', field: 'edition', editable: true }, // Editable field
-        { headerName: 'Number of Pages', field: 'number_of_pages', editable: true }, // Editable field
-        { headerName: 'Language', field: 'language', editable: true }, // Editable field
-        { headerName: 'Category', field: 'category', editable: true }, // Editable field
-        // {
-        //     headerName: 'Book Cover',
-        //     field: 'book_cover',
-        //     cellRenderer: (params) => {
-        //         return params.value ? `<img src="${params.value}" alt="Book Cover" style="width: 100px; height: auto;"/>` : 'No Cover';
-        //     },
-        // },
-        { headerName: 'Created At', field: 'created_at', editable: false }, // Non-editable
-        { headerName: 'Updated At', field: 'updated_at', editable: false }, // Non-editable
+        { headerName: 'Name', field: 'name', editable: true }, // Editable field
+        { headerName: 'Email', field: 'email', editable: true }, // Editable field
+        { headerName: 'Date of Birth', field: 'date_of_birth', editable: true }, // Editable field
+        { headerName: 'Created At', field: 'created_at', editable: false },
+        { headerName: 'Updated At', field: 'updated_at', editable: false },
         {
             headerName: 'Actions',
             field: 'actions',
@@ -87,10 +74,10 @@ export default function BookManagement() {
         sortable: true,
     };
 
-    // Function to handle deletion of a book
-    const handleDelete = async (bookId) => {
+    // Function to handle the deletion of an author
+    const handleDelete = async (authorId) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/v1/close/book/${bookId}`, {
+            const response = await fetch(`http://localhost:8000/api/v1/close/author/${authorId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
@@ -99,25 +86,23 @@ export default function BookManagement() {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to delete book: ${response.status}`);
+                throw new Error(`Failed to delete author: ${response.status}`);
             }
 
-            toast.success('Book deleted successfully');
-            // Remove the deleted book from the grid
-            setBookAtom((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+            toast.success('Author deleted successfully');
+            // Remove the deleted author from the grid
+            setAuthor((prevAuthors) => prevAuthors.filter((author) => author.id !== authorId));
         } catch (error) {
-            toast.error(`Error deleting book: ${error.message}`);
+            toast.error(`Error deleting author: ${error.message}`);
         }
     };
 
     // Function to handle updates when a cell is changed
     const handleCellChange = async (event) => {
         const updatedData = event.data;
-        //Remove the book cover from the updated data
 
-        delete updatedData.book_cover
         try {
-            const response = await fetch(`http://localhost:8000/api/v1/close/book/${updatedData.id}`, {
+            const response = await fetch(`http://localhost:8000/api/v1/close/author/${updatedData.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(updatedData), // Send only the updated data
                 headers: {
@@ -127,19 +112,19 @@ export default function BookManagement() {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to update book: ${response.status}`);
+                throw new Error(`Failed to update author: ${response.status}`);
             }
 
-            toast.success('Book updated successfully');
+            toast.success('Author updated successfully');
         } catch (error) {
-            toast.error(`Error updating book: ${error.message}`);
+            toast.error(`Error updating author: ${error.message}`);
         }
     };
 
     return (
         <div className={'flex flex-col'}>
             <div className={"flex flex-row justify-between"}>
-                <h1 className="text-3xl font-bold mb-7">Book Management</h1>
+                <h1 className="text-3xl font-bold mb-7">Author Management</h1>
                 {loading ? (
                     <ClipLoader
                         className={'flex justify-center'}
@@ -155,17 +140,17 @@ export default function BookManagement() {
                 <Button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
-                        // Navigate to the create book page
-                        router.push('/dashboard/admin/book/create');
+                        // Navigate to the create author page
+                        router.push('/dashboard/admin/author/create');
                     }}
                 >
-                    Add Book
+                    Add Author
                 </Button>
             </div>
             <div className="ag-theme-quartz-dark" style={{ height: 500 }}>
                 <AgGridReact
-                    rowData={bookAtomData}     // Row data from atom
-                    columnDefs={colDefs}        // Column definitions with delete and editable fields
+                    rowData={authorAtomData}     // Row data from atom
+                    columnDefs={colDefs}          // Column definitions with delete and editable fields
                     defaultColDef={defaultColDef} // Default column settings
                     onCellValueChanged={handleCellChange} // Handle cell changes
                 />
