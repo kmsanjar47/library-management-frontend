@@ -77,7 +77,8 @@ export default function Dashboard() {
             if (response.ok) {
                 alert(`Successfully borrowed ${selectedBook.title}`);
             } else {
-                alert('Error borrowing book');
+                console.log(response);
+                alert('Book borrowing failed');
             }
         } catch (error) {
             console.error('Error borrowing book:', error);

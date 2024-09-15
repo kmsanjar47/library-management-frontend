@@ -25,7 +25,7 @@ export default function AuthorManagement() {
                 const response = await fetch('http://localhost:8000/api/v1/close/author', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     },
                 });
                 if (response.status === 200) {
@@ -80,7 +80,7 @@ export default function AuthorManagement() {
             const response = await fetch(`http://localhost:8000/api/v1/close/author/${authorId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -106,7 +106,7 @@ export default function AuthorManagement() {
                 method: 'PUT',
                 body: JSON.stringify(updatedData), // Send only the updated data
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });

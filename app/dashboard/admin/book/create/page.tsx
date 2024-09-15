@@ -3,17 +3,22 @@ import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
+import authorAtom from "@/atoms/author-atom";
+import {useAtom} from "jotai";
+import categoryAtom from "@/atoms/category-atom";
 
 export default function BookCreation() {
     const router = useRouter();
+    const [authorAtomData] = useAtom(authorAtom);
+    const [categoryAtomData] = useAtom(categoryAtom);
     const [formData, setFormData] = useState({
         title: '',
         author: '',
         isbn: '',
-        publisher: '',
         publishedDate: '',
         edition: '',
         numberOfPages: '',
+        category:'',
         language: '',
         book_cover: null // To store the file
     });
@@ -41,10 +46,9 @@ export default function BookCreation() {
         submissionData.append('title', formData.title);
         submissionData.append('author', formData.author);
         submissionData.append('isbn', formData.isbn);
-        submissionData.append('publisher', formData.publisher);
-        submissionData.append('publishedDate', formData.publishedDate);
+        submissionData.append('published_date', formData.publishedDate);
         submissionData.append('edition', formData.edition);
-        submissionData.append('numberOfPages', formData.numberOfPages);
+        submissionData.append('number_of_pages', formData.numberOfPages);
         submissionData.append('language', formData.language);
         if (formData.book_cover) {
             submissionData.append('book_cover', formData.book_cover);
@@ -55,7 +59,7 @@ export default function BookCreation() {
                 method: "POST",
                 body: submissionData,
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     // Note: Do not set 'Content-Type' here. FormData will set it correctly.
                 },
             });
@@ -77,7 +81,7 @@ export default function BookCreation() {
                 method: "POST",
                 body: submissionData,
                 headers: {
-                    Authorization: `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    Authorization: `Token ${localStorage.getItem('authToken')}`,
                 },
             });
 
@@ -113,20 +117,45 @@ export default function BookCreation() {
                 </div>
                 <div>
                     <label>Author</label>
-                    <Input className="border border-gray-300 rounded-md p-2 w-full" name="author" value={formData.author} onChange={handleInputChange} />
+                    <select
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                        name="author"
+                        value={formData.author}
+                        onChange={handleInputChange}
+                    >
+                        <option value="">Select author</option>
+                        {authorAtomData.map(author => (
+                            <option key={author.id} value={author.id}>
+                                {author.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleInputChange}
+                    >
+                        <option value="">Select Category</option>
+                        {categoryAtomData.map(author => (
+                            <option key={author.id} value={author.id}>
+                                {author.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div>
                     <label>ISBN</label>
                     <Input className="border border-gray-300 rounded-md p-2 w-full" name="isbn" value={formData.isbn}
                            onChange={handleInputChange}/>
                 </div>
-                <div>
-                    <label>Publisher</label>
-                    <Input className="border border-gray-300 rounded-md p-2 w-full" name="publisher" value={formData.publisher} onChange={handleInputChange} />
-                </div>
+
                 <div>
                     <label>Published Date</label>
-                    <Input className="border border-gray-300 rounded-md p-2 w-full" name="publishedDate"
+                    <Input className="border border-gray-300 rounded-md p-2 w-full" name="publishedDate" type={"date"}
                            value={formData.publishedDate} onChange={handleInputChange}/>
                 </div>
                 <div>

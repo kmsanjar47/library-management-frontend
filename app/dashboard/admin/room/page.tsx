@@ -25,7 +25,7 @@ export default function RoomManagement() {
                 const response = await fetch('http://localhost:8000/api/v1/close/room', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`, // Add the token to the Authorization header
                     },
                 });
                 if (response.status === 200) {
@@ -53,7 +53,7 @@ export default function RoomManagement() {
                 const response = await fetch(`http://localhost:8000/api/v1/close/room/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     },
                 });
                 if (response.ok) {
@@ -80,7 +80,7 @@ export default function RoomManagement() {
             const response = await fetch(`http://localhost:8000/api/v1/close/room/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedData),

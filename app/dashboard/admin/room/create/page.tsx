@@ -16,7 +16,6 @@ export default function RoomCreation() {
         projector: false,
         tv: false,
         status: 'unavailable', // Default value based on choices
-        booked_by: '', // Assuming this is a member ID or similar
     });
 
     const handleInputChange = (e) => {
@@ -35,7 +34,7 @@ export default function RoomCreation() {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });

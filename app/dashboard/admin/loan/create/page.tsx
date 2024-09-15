@@ -35,7 +35,7 @@ export default function LoanCreation() {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });

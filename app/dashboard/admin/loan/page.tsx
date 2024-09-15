@@ -23,7 +23,7 @@ export default function LoanManagement() {
                 const response = await fetch('http://localhost:8000/api/v1/close/loan', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`, // Add the token to the Authorization header
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`, // Add the token to the Authorization header
                     },
                 });
                 if (response.status === 200) {
@@ -51,7 +51,7 @@ export default function LoanManagement() {
                 const response = await fetch(`http://localhost:8000/api/v1/close/loan/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     },
                 });
                 if (response.status === 204) {
@@ -82,7 +82,7 @@ export default function LoanManagement() {
                 method: 'PATCH',
                 body: JSON.stringify(updatedData), // Send updated data
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });

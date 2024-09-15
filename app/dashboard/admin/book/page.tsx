@@ -25,7 +25,7 @@ export default function BookManagement() {
                 const response = await fetch('http://localhost:8000/api/v1/close/book', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     },
                 });
                 if (response.status === 200) {
@@ -57,6 +57,7 @@ export default function BookManagement() {
         { headerName: 'Number of Pages', field: 'number_of_pages', editable: true }, // Editable field
         { headerName: 'Language', field: 'language', editable: true }, // Editable field
         { headerName: 'Category', field: 'category', editable: true }, // Editable field
+        {headerName:'Status',field:'status',editable:true},
         // {
         //     headerName: 'Book Cover',
         //     field: 'book_cover',
@@ -93,7 +94,7 @@ export default function BookManagement() {
             const response = await fetch(`http://localhost:8000/api/v1/close/book/${bookId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -121,7 +122,7 @@ export default function BookManagement() {
                 method: 'PUT',
                 body: JSON.stringify(updatedData), // Send only the updated data
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
             });

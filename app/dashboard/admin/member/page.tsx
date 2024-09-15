@@ -25,7 +25,7 @@ export default function MemberManagement() {
                 const response = await fetch('http://127.0.0.1:8000/api/register/', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`, // Add the token to the Authorization header
+                        'Authorization': `Token ${localStorage.getItem('authToken')}`, // Add the token to the Authorization header
                     },
                 });
                 if (response.status === 200) {
@@ -76,7 +76,7 @@ export default function MemberManagement() {
             const response = await fetch(`http://127.0.0.1:8000/api/register/`, {
                 method: 'PUT',  // PUT method to update the data
                 headers: {
-                    'Authorization': `Token 853b865bdb3e7775b3f6be62501240829574fff8`,
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedMember),
